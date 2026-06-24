@@ -140,8 +140,7 @@ def handle_client(socket)
   path = URI(raw_path).path
   head_only = method == "HEAD"
 
-  case [method, path]
-  in ["GET" | "HEAD", "/health"]
+  if (method == "GET" || method == "HEAD") && path == "/health"
     write_response(
       socket,
       200,
@@ -150,7 +149,7 @@ def handle_client(socket)
       "ok\n",
       head_only: head_only
     )
-  in ["GET" | "HEAD", "/sub-overlay/all"]
+  elsif (method == "GET" || method == "HEAD") && path == "/sub-overlay/all"
     started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     body = render_overlay_yaml
     elapsed_ms = ((Process.clock_gettime(Process::CLOCK_MONOTONIC) - started) * 1000).round
@@ -168,10 +167,11 @@ def handle_client(socket)
       head_only: head_only
     )
   else
+    allowed_method = method == "GET" || method == "HEAD"
     write_response(
       socket,
-      method == "GET" || method == "HEAD" ? 404 : 405,
-      method == "GET" || method == "HEAD" ? "Not Found" : "Method Not Allowed",
+      allowed_method ? 404 : 405,
+      allowed_method ? "Not Found" : "Method Not Allowed",
       { "Content-Type" => "text/plain; charset=utf-8", "Cache-Control" => "no-store" },
       "not found\n",
       head_only: head_only
