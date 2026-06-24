@@ -1,0 +1,29 @@
+# Non-secret overlay plan for local profile generation.
+#
+# This file intentionally stores only group names and generic behavior.
+# Runtime endpoints, usernames, and passwords must be provided locally through
+# environment variables or a root-only env file on the target machine.
+
+source_template:
+  name: ACL4SSR Online Full NoAuto
+  url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/config/ACL4SSR_Online_Full_NoAuto.ini
+
+overlay:
+  suffix: "-dialer-proxy"
+  dialer_name: VPS-Dialer
+  dialer_type: socks5
+  dialer_server_env: DIALER_SERVER
+  dialer_port_env: DIALER_PORT
+  dialer_username_env: DIALER_USERNAME
+  dialer_password_env: DIALER_PASSWORD
+  dialer_udp: true
+  append_to_parent_groups: true
+
+target_groups:
+  - "🇭🇰 香港节点"
+  - "🇯🇵 日本节点"
+  - "🇺🇲 美国节点"
+  - "🇸🇬 狮城节点"
+  - "🇨🇳 台湾节点"
+  - "🇰🇷 韩国节点"
+  - "🎥 奈飞节点"
