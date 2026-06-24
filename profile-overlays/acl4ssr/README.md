@@ -8,9 +8,32 @@ store subscriptions, nodes, UUIDs, passwords, or runtime endpoints.
 ## Files
 
 - `groups.yml`: group list and generic overlay settings.
+- `full-noauto-plus.ini`: Subconverter template based on ACL4SSR Online
+  Full NoAuto. Use this as the `config=` parameter in Subconverter.
 - `apply-profile-overlay.rb`: local post-processing script.
 
-## What It Does
+## How It Fits Subconverter
+
+Your normal chain can stay the same:
+
+```text
+Sub Store -> Subconverter -> Clash/Mihomo YAML -> local overlay -> OpenClash
+```
+
+Use `full-noauto-plus.ini` in the Subconverter URL where the upstream
+ACL4SSR template was previously used. It keeps the ACL4SSR rules and adds
+parallel selection groups such as:
+
+```text
+🇭🇰 香港节点
+🇭🇰 香港节点-dialer-proxy
+```
+
+Subconverter templates can define rules and proxy groups, but they do not
+rewrite every generated node with Mihomo-only fields such as `dialer-proxy`.
+That final node cloning step is handled by `apply-profile-overlay.rb`.
+
+## What The Overlay Does
 
 The script keeps original groups and nodes unchanged. For each group listed in
 `groups.yml`, it creates a parallel group with the configured suffix and clones
@@ -40,6 +63,15 @@ ruby apply-profile-overlay.rb groups.yml /etc/openclash/ALL.yaml /tmp/ALL.with-o
 
 Then validate the generated YAML with the target Mihomo binary before replacing
 any live configuration.
+
+## Raw Template URL
+
+Use this URL as the Subconverter `config=` value after this repository is
+published:
+
+```text
+https://raw.githubusercontent.com/LmyNBL/utility-workbench/main/profile-overlays/acl4ssr/full-noauto-plus.ini
+```
 
 ## Source Template
 
