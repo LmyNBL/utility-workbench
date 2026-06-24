@@ -35,6 +35,17 @@ Subconverter templates can define rules and proxy groups, but they do not
 rewrite every generated node with Mihomo-only fields such as `dialer-proxy`.
 That final node cloning step is handled by `apply-profile-overlay.rb`.
 
+If Sub Store is doing the final post-processing, use the Sub Store file endpoint
+as the final OpenClash config subscription. Do not put that final YAML endpoint
+back through Subconverter as a normal node subscription, or Mihomo-only fields
+such as `dialer-proxy` may be stripped again.
+
+Example final endpoint shape:
+
+```text
+http://SERVER:25500/<api-prefix>/api/file/All-Dialer-Profile
+```
+
 ## What The Overlay Does
 
 The script keeps original groups and nodes unchanged. For each group listed in
@@ -98,6 +109,19 @@ SUBCONVERTER_URL=http://127.0.0.1:25501/sub
 SUBSTORE_URL=http://192.168.11.142:25500/.../download/collection/All
 SUBCONVERTER_CONFIG_URL=https://raw.githubusercontent.com/LmyNBL/utility-workbench/main/profile-overlays/acl4ssr/full-noauto-plus.ini
 ```
+
+## Sub Store Final File Mode
+
+The Sub Store file named `All-Dialer-Profile` can own the complete chain:
+
+```text
+Sub Store collection -> Subconverter with full-noauto-plus.ini -> Sub Store script restores dialer-proxy -> OpenClash
+```
+
+Use the `api/file/All-Dialer-Profile` URL directly in OpenClash as a config
+subscription. The `download/collection/All-Dialer` URL is only a node collection;
+it does not contain `proxy-groups` or `rules`, so OpenClash may place everything
+under a default global group if it is used directly.
 
 ## Raw Template URL
 
