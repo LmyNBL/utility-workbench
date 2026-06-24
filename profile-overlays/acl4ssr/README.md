@@ -11,6 +11,8 @@ store subscriptions, nodes, UUIDs, passwords, or runtime endpoints.
 - `full-noauto-plus.ini`: Subconverter template based on ACL4SSR Online
   Full NoAuto. Use this as the `config=` parameter in Subconverter.
 - `apply-profile-overlay.rb`: local post-processing script.
+- `serve-overlay.rb`: small HTTP wrapper that runs Subconverter and the overlay
+  script for every subscription request.
 
 ## How It Fits Subconverter
 
@@ -63,6 +65,39 @@ ruby apply-profile-overlay.rb groups.yml /etc/openclash/ALL.yaml /tmp/ALL.with-o
 
 Then validate the generated YAML with the target Mihomo binary before replacing
 any live configuration.
+
+## Automatic Wrapper
+
+Run `serve-overlay.rb` on a trusted local server and point OpenClash at:
+
+```text
+http://SERVER:25502/sub-overlay/all
+```
+
+Every request performs this chain:
+
+```text
+fetch Subconverter YAML -> apply profile overlay -> return final YAML
+```
+
+Required environment variables:
+
+```text
+DIALER_SERVER=192.168.50.41
+DIALER_PORT=7891
+```
+
+Optional environment variables:
+
+```text
+DIALER_USERNAME=...
+DIALER_PASSWORD=...
+WRAPPER_BIND=0.0.0.0
+WRAPPER_PORT=25502
+SUBCONVERTER_URL=http://127.0.0.1:25501/sub
+SUBSTORE_URL=http://192.168.11.142:25500/.../download/collection/All
+SUBCONVERTER_CONFIG_URL=https://raw.githubusercontent.com/LmyNBL/utility-workbench/main/profile-overlays/acl4ssr/full-noauto-plus.ini
+```
 
 ## Raw Template URL
 
