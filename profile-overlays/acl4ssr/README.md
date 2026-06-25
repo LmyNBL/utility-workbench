@@ -132,6 +132,14 @@ published:
 https://raw.githubusercontent.com/LmyNBL/utility-workbench/main/profile-overlays/acl4ssr/full-noauto-plus.ini
 ```
 
+For the multi-dialer test profile that keeps the original groups, the
+`-dialer-proxy` VPS groups, and the `-twocard57` LAN dialer groups side by side,
+use:
+
+```text
+https://raw.githubusercontent.com/LmyNBL/utility-workbench/main/profile-overlays/acl4ssr/full-noauto-multi-dialer.ini
+```
+
 ## Source Template
 
 The current group plan is based on the ACL4SSR Online Full NoAuto template:
